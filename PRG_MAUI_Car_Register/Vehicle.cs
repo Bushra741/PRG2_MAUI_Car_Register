@@ -81,33 +81,21 @@ class Vehicle
         {
             if (String.IsNullOrWhiteSpace(value))
             {
+                throw new ArgumentException("Modell måste anges.");
+            }
 
 
-                if (string.IsNullOrWhiteSpace(manufacturer))
+               
+                if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö0-9\s\-]+$"))
                 {
-                    throw new ArgumentException("Märke måste anges.");
-                }
-                bool letters = false;
-
-                foreach (char c in value)
-                {
-                    if (char.IsLetter(c))
-                    {
-                        letters = true;
-                    }
-                    if (char.IsDigit(c))
-                    {
-                        throw new ArgumentException("Märke få inte innehålla siffror.");
-                    }
-                }
-                if (!letters)
-                {
-                    throw new ArgumentException("Märke måste bara innehålla bokstäver.");
+                    throw new ArgumentException(
+                        "Modellen innehåller ogiltiga tecken.");
                 }
                 model = value;
             }
+        
         }
-    }
+    
 
     //TODO Modell ska valideras, sparas i objektet och visas i UI
     public string Manufacturer { get 
@@ -117,9 +105,29 @@ class Vehicle
             if (string.IsNullOrWhiteSpace(value)) 
             { 
                 throw new ArgumentException("Märke måste anges."); 
-            } 
+            }
 
-            value = value.Trim(); if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö\s]+$")) 
+          
+            bool letters = false;
+
+            foreach (char c in value)
+            {
+                if (char.IsLetter(c))
+                {
+                    letters = true;
+                }
+                if (char.IsDigit(c))
+                {
+                    throw new ArgumentException("Märke få inte innehålla siffror.");
+                }
+            }
+            if (!letters)
+            {
+                throw new ArgumentException("Märke måste bara innehålla bokstäver.");
+            }
+            value = value.Trim(); 
+
+            if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö\s]+$")) 
             { 
                 throw new ArgumentException("Märke får endast innehålla bokstäver."); 
             } 
