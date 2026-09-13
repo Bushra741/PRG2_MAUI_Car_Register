@@ -8,6 +8,11 @@
         {
             InitializeComponent();
             pickerType.SelectedIndex = 0;
+
+            entryModelYear.ItemsSource =
+            Enumerable.Range(1895, DateTime.Today.Year - 1895 + 1).ToList();
+
+            entryModelYear.SelectedItem = DateTime.Today.Year;
         }
 
         private void OnRegisterClicked(object sender, EventArgs e)
@@ -16,9 +21,10 @@
             {
                 Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
 
-                vehicle.RegistrationNumber = entryRegistrationNumber.Text; ;
+                vehicle.RegistrationNumber = entryRegistrationNumber.Text;
                 vehicle.Manufacturer = entryManufacturer.Text;
                 vehicle.Model = entryModel.Text;
+                vehicle.Year = (int)entryModelYear.SelectedItem;
 
                 vehicleList.Add(vehicle);
                 listViewVehicles.ItemsSource = null;
