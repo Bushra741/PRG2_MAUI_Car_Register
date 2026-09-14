@@ -111,7 +111,7 @@ class Vehicle
                 {
                     letters = true;
                 }
-                if (char.IsDigit(c))
+                if (char.IsDigit(c) && !char.IsWhiteSpace(c))
                 {
                     throw new ArgumentException("Märke få inte innehålla siffror.");
                 }
