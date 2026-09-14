@@ -23,16 +23,20 @@ class Vehicle
 
         set
         {
-            if (!String.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                if (value.Length == 6)
+                throw new ArgumentException("Registreringsnummer kan inte vara tomt.");
+
+            }
+
+            if (value.Length == 6)
                 {
                     for (int i = 0; i < 3; i++)
                     {
                         if (!char.IsLetter(value[i]))
                             throw new ArgumentException("Inkorrekt registreringsnummer: De första tre tecknen måste vara bokstäver.");
-                    }
 
+                    }
                     for (int i = 3; i < 6; i++)
                     {
                         if (i < 5)
@@ -46,23 +50,16 @@ class Vehicle
                                 throw new ArgumentException("Inkorrekt registreringsnummer: Det sjätte tecknet måste vara en siffra eller en bokstav.");
                         }
                     }
+                         registrationNumber = value.ToUpper();
 
-                }
-                else
-                {
-                    throw new ArgumentException("Inkorrekt, snälla skriva in giltig nummer");
-                }
             }
+            
+
             else
             {
                 throw new ArgumentException("Ett registreringsnummer måste bestå av exakt 6 tecken, med tre bokstäver följt av två siffror och en siffra eller bokstav.");
             }
-            if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö]{3}[0-9]{2}[A-Za-z0-9ÅÄÖåäö]$"))
-            {
-                throw new ArgumentException("Ogiltigt registreringsnummer.");
-            }
-
-            registrationNumber = value.ToUpper();
+           
         }
     }
 
@@ -84,12 +81,11 @@ class Vehicle
                 throw new ArgumentException("Modell måste anges.");
             }
 
-
                
                 if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö0-9\s\-]+$"))
                 {
                     throw new ArgumentException(
-                        "Modellen innehåller ogiltiga tecken.");
+                        "Modellen innehållar ogiltiga tecken.");
                 }
                 model = value;
             }
@@ -106,8 +102,7 @@ class Vehicle
             { 
                 throw new ArgumentException("Märke måste anges."); 
             }
-
-          
+            value = value.Trim();
             bool letters = false;
 
             foreach (char c in value)
@@ -125,13 +120,6 @@ class Vehicle
             {
                 throw new ArgumentException("Märke måste bara innehålla bokstäver.");
             }
-            value = value.Trim(); 
-
-            if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö\s]+$")) 
-            { 
-                throw new ArgumentException("Märke får endast innehålla bokstäver."); 
-            } 
-            
             manufacturer = value; } 
     
     }
@@ -153,7 +141,9 @@ class Vehicle
             }
             if (!Regex.IsMatch(value.ToString(), @"^[1-2][0-9][0-9][0-9]$"))
 
-            { throw new ArgumentException("Årsmodellen måste bestå av fyra siffror."); }
+            { 
+                throw new ArgumentException("Årsmodellen måste bestå av fyra siffror."); 
+            }
 
             year = value;
         }
