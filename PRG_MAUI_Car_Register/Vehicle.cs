@@ -85,7 +85,7 @@ class Vehicle
                 if (!Regex.IsMatch(value, @"^[A-Za-zÅÄÖåäö0-9\s\-]+$"))
                 {
                     throw new ArgumentException(
-                        "Modellen innehållar ogiltiga tecken.");
+                        "Modellen innehållar inkorrekta tecken.");
                 }
                 model = value;
             }
