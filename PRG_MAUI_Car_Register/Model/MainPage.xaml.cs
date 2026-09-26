@@ -1,4 +1,6 @@
-﻿namespace PRG_MAUI_Car_Register
+﻿using PRG_MAUI_Car_Register.Model;
+
+namespace PRG_MAUI_Car_Register
 {
     public partial class MainPage : ContentPage
     {
@@ -17,30 +19,38 @@
 
         private void OnRegisterClicked(object sender, EventArgs e)
         {
-            try
-            {
-                Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
+           
+                try
+                {
+                    Vehicle vehicle = new Vehicle((Vehicle.Type)pickerType.SelectedIndex);
 
-              
-                vehicle.RegistrationNumber = entryRegistrationNumber.Text;
-                vehicle.Manufacturer = entryManufacturer.Text;
-                vehicle.Model = entryModel.Text;
-                vehicle.Year = (int)entryModelYear.SelectedItem;
+                    vehicle.RegistrationNumber = entryRegistrationNumber.Text;
+                    vehicle.Manufacturer = entryManufacturer.Text;
+                    vehicle.Model = entryModel.Text;
 
-                vehicleList.Add(vehicle);
-                listViewVehicles.ItemsSource = null;
-                listViewVehicles.ItemsSource = vehicleList;
+                    // Safely parse the year from the Entry text field
+                    if (int.TryParse(entryModelYear.Text, out int year))
+                    {
+                        vehicle.Year = year;
+                    }
+                    else
+                    {
+                        DisplayAlert("Fel", "Årtalet måste vara ett giltigt heltal.", "OK");
+                        return;
+                    }
 
-                ClearTextFields();
-            }
+                    vehicleList.Add(vehicle);
+                    listViewVehicles.ItemsSource = null;
+                    listViewVehicles.ItemsSource = vehicleList;
 
-            // här "fångas" eventuella felmeddelanden från Vehicle
-            catch (ArgumentException ex)
-            {
-                DisplayAlert("Fel", ex.Message, "OK");
+                    ClearTextFields();
+                }
+                catch (ArgumentException ex)
+                {
+                    DisplayAlert("Fel", ex.Message, "OK");
+                
             }
         }
-
         private void OnRadioCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             if (e.Value != true) return;
@@ -50,15 +60,21 @@
 
             if (radioCar.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.Bil).ToList();
+                filteredList = vehicleList
+                    .Where(v => v.VehicleType == "Bil")
+                    .ToList();
             }
             else if (radioMC.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.MC).ToList();
+                filteredList = vehicleList
+                    .Where(v => v.VehicleType == "MC")
+                    .ToList();
             }
             else if (radioTruck.IsChecked)
             {
-                filteredList = vehicleList.Where(v => v.VehicleType == Vehicle.Type.Lastbil).ToList();
+                filteredList = vehicleList
+                    .Where(v => v.VehicleType == "Lastbil")
+                    .ToList();
             }
             else
             {
